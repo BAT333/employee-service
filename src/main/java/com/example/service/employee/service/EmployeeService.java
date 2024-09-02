@@ -1,6 +1,6 @@
 package com.example.service.employee.service;
 
-import com.example.service.employee.config.exceptions.EmployeException;
+import com.example.service.employee.config.exceptions.EmployeeException;
 import com.example.service.employee.domain.Employee;
 import com.example.service.employee.model.DataEmployee;
 import com.example.service.employee.model.DataEmployeeDTO;
@@ -17,7 +17,7 @@ public class EmployeeService {
     private EmployeeRepository repository;
     public DataEmployee register(DataEmployeeDTO employee) {
         if(repository.findByCreciAndEmailAndTelephone(employee.creci(),employee.email(),employee.telephone()).isPresent()){
-            throw new EmployeException();
+            throw new EmployeeException();
         }
         var user = this.repository.save(new Employee(employee));
         return new DataEmployee(user);
@@ -25,7 +25,7 @@ public class EmployeeService {
 
     public void delete(Long id) {
         if(!repository.existsByIdAndActiveTrue(id)){
-            throw new EmployeException();
+            throw new EmployeeException();
         }
         this.repository.findByIdAndActiveTrue(id).ifPresent(Employee::delete);
     }
@@ -38,14 +38,14 @@ public class EmployeeService {
 
     public DataEmployee employee(Long id) {
         if(!repository.existsById(id)){
-            throw new EmployeException();
+            throw new EmployeeException();
         }
         return this.repository.findById(id).map(DataEmployee::new).get();
     }
 
     public DataEmployee update(Long id, DataEmployeeUpdateDTO employee) {
         if(!repository.existsByIdAndActiveTrue(id)||!repository.existsByCreci(employee.creci())){
-            throw new EmployeException();
+            throw new EmployeeException();
         }
         var user = this.repository.findByIdAndActiveTrue(id);
         user.ifPresent(em -> em.update(employee));

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ConfigExceptions {
 
-    @ExceptionHandler({EmployeException.class})
+    @ExceptionHandler({EmployeeException.class})
     public ResponseEntity<String> ClientNotExist(){
         return ResponseEntity.noContent().build();
     }
