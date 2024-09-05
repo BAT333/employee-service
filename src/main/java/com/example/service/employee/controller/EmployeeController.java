@@ -26,7 +26,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService service;
 
-    @PostMapping("/register")
+    @PostMapping("/public/register")
     @Transactional
     @Operation(summary ="Register the employee", description = "register employee if everything is ok, return the employee's registered information")
     public ResponseEntity<DataEmployee> register(@RequestBody @Valid DataEmployeeDTO employee, UriComponentsBuilder builder){
