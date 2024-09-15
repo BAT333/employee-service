@@ -21,17 +21,15 @@ public class SecurityConfig {
     private SecurityFilter filter;
     @Autowired
     private GatewayFilter gatewayFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security){
         try {
             return security.csrf(AbstractHttpConfigurer::disable)
-                    .sessionManagement(https-> https.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                    .authorizeHttpRequests(authoriza->
-                            authoriza.
-                                    requestMatchers("/public/**").permitAll().
-                                    requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll().
-                                    anyRequest().permitAll())
+                    .sessionManagement(https -> https.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .authorizeHttpRequests(authorize -> authorize.
+                            requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                            .anyRequest().authenticated())
                     .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(gatewayFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
