@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/api/employee")
 @SecurityRequirement(name = "bearer-key")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://172.27.64.1:8082")
 public class EmployeeController {
 
     @Autowired
