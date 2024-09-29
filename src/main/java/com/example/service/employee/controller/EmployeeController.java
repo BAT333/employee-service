@@ -60,7 +60,7 @@ public class EmployeeController {
     @PutMapping("/update/{id}")
     @Transactional
     @Operation(summary ="Update employee information", description = "Search for an employee by ID and update the required information")
-    public ResponseEntity update(@PathVariable("id") Long id,@RequestBody @Valid DataEmployeeUpdateDTO employee){
+    public ResponseEntity<DataEmployee> update(@PathVariable("id") Long id,@RequestBody @Valid DataEmployeeUpdateDTO employee){
         return ResponseEntity.ok(this.service.update(id,employee));
     }
 
