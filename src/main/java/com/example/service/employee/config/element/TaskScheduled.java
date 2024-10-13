@@ -14,7 +14,7 @@ public class TaskScheduled {
 
 
 
-    @Scheduled(fixedDelay = 2, timeUnit = TimeUnit.HOURS)
+    @Scheduled(fixedDelay = 24, timeUnit = TimeUnit.HOURS)
     @CacheEvict(value = "Employees", allEntries = true)
     public void clearingClientCache() {
         log.info("Cleared 'Employees' cache on: " + LocalDateTime.now());
