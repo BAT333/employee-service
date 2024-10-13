@@ -6,9 +6,10 @@ import com.example.service.employee.model.DataEmployeeUpdateDTO;
 import com.example.service.employee.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,6 +30,7 @@ public class EmployeeController {
     @PostMapping("/public/register")
     @Transactional
     @Operation(summary ="Register the employee", description = "register employee if everything is ok, return the employee's registered information")
+    @CachePut(value = "Employees",key = "#employee.creci")
     public ResponseEntity<DataEmployee> register(@RequestBody @Valid DataEmployeeDTO employee, UriComponentsBuilder builder){
         var user = this.service.register(employee);
         var uri = builder.path("/employee/{id}").buildAndExpand(user.id()).toUri();
@@ -41,17 +43,20 @@ public class EmployeeController {
     @DeleteMapping("/delete/{id}")
     @Transactional
     @Operation(summary ="Delete an employee", description = "Take a specific employee with his ID and delete it")
+    @CachePut(value = "Employees",key = "#id")
     public ResponseEntity delete(@PathVariable("id") Long id){
         this.service.delete(id);
         return ResponseEntity.noContent().build();
     }
     @GetMapping
     @Operation(summary ="Get all employees", description = "Returns a list of all employees")
+    @Cacheable("Employees")
     public ResponseEntity<Page<DataEmployee>> allEmployee(@PageableDefault(sort = {"id"})Pageable pageable){
         return ResponseEntity.ok(this.service.all(pageable));
     }
     @GetMapping("/{id}")
     @Operation(summary ="search for an employee", description = "search an employee by his id")
+    @Cacheable(value = "Employees",key = "#id")
     public ResponseEntity<DataEmployee> employee(@PathVariable("id") Long id){
         return ResponseEntity.ok(this.service.employee(id));
     }
@@ -60,6 +65,7 @@ public class EmployeeController {
     @PutMapping("/update/{id}")
     @Transactional
     @Operation(summary ="Update employee information", description = "Search for an employee by ID and update the required information")
+    @CachePut(value = "Employees",key = "#id")
     public ResponseEntity<DataEmployee> update(@PathVariable("id") Long id,@RequestBody @Valid DataEmployeeUpdateDTO employee){
         return ResponseEntity.ok(this.service.update(id,employee));
     }

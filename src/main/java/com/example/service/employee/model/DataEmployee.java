@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.io.Serializable;
+
 public record DataEmployee(
         Long id,
         @NotNull
@@ -29,7 +31,7 @@ public record DataEmployee(
         @NotNull
         TypeBroker broker
 
-) {
+) implements Serializable {
         public DataEmployee(Employee employee) {
                 this(employee.getId(), employee.getName(), employee.getSurname(), employee.getCreci(), employee.getEmail(),
                         employee.getTelephone()
